@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>For My Boo 💕</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital,wght@0,400;0,600;1,400&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --pink-deep:    #c2185b;
+      --pink-mid:     #e91e8c;
+      --pink-soft:    #f48fb1;
+      --pink-pale:    #fce4ec;
+      --pink-blush:   #fff0f5;
+      --gold:         #c9a96e;
+    }
+
+    html, body {
+      min-height: 100%;
+      background: linear-gradient(135deg, #fff0f5 0%, #fce4ec 50%, #f8bbd0 100%);
+      font-family: 'Lora', serif;
+      overflow-x: hidden;
+    }
+
+    /* ── floating hearts background ── */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .hearts-bg span {
+      position: absolute;
+      bottom: -60px;
+      font-size: 1.4rem;
+      animation: floatUp linear infinite;
+      opacity: 0;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(0) rotate(0deg);   opacity: 0.7; }
+      100% { transform: translateY(-110vh) rotate(30deg); opacity: 0; }
+    }
+
+    /* stagger each heart */
+    .hearts-bg span:nth-child(1)  { left:  5%; font-size:1.2rem; animation-duration:9s;  animation-delay:0s;   }
+    .hearts-bg span:nth-child(2)  { left: 12%; font-size:1.8rem; animation-duration:11s; animation-delay:1s;   }
+    .hearts-bg span:nth-child(3)  { left: 20%; font-size:1.0rem; animation-duration:8s;  animation-delay:2s;   }
+    .hearts-bg span:nth-child(4)  { left: 30%; font-size:2.0rem; animation-duration:13s; animation-delay:0.5s; }
+    .hearts-bg span:nth-child(5)  { left: 40%; font-size:1.3rem; animation-duration:10s; animation-delay:3s;   }
+    .hearts-bg span:nth-child(6)  { left: 52%; font-size:1.6rem; animation-duration:12s; animation-delay:1.5s; }
+    .hearts-bg span:nth-child(7)  { left: 62%; font-size:0.9rem; animation-duration:9s;  animation-delay:4s;   }
+    .hearts-bg span:nth-child(8)  { left: 72%; font-size:1.4rem; animation-duration:14s; animation-delay:2.5s; }
+    .hearts-bg span:nth-child(9)  { left: 82%; font-size:1.1rem; animation-duration:7s;  animation-delay:0.8s; }
+    .hearts-bg span:nth-child(10) { left: 91%; font-size:1.7rem; animation-duration:11s; animation-delay:3.5s; }
+    .hearts-bg span:nth-child(11) { left: 96%; font-size:1.3rem; animation-duration:10s; animation-delay:5s;   }
+    .hearts-bg span:nth-child(12) { left: 25%; font-size:2.2rem; animation-duration:15s; animation-delay:6s;   }
+
+    /* ── lock screen ── */
+    #lock-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: radial-gradient(ellipse at 50% 40%, #8b003a 0%, #500020 50%, #2a0010 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    #lock-screen.hide {
+      opacity: 0;
+      transform: scale(1.04);
+      pointer-events: none;
+    }
+    .lock-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .lock-particles span {
+      position: absolute;
+      bottom: -60px;
+      animation: floatUp linear infinite;
+      opacity: 0;
+    }
+    .lock-particles span:nth-child(1)  { left:  6%; font-size:1.1rem; animation-duration: 9s; animation-delay:0s;   }
+    .lock-particles span:nth-child(2)  { left: 15%; font-size:1.6rem; animation-duration:11s; animation-delay:1.3s; }
+    .lock-particles span:nth-child(3)  { left: 25%; font-size:0.9rem; animation-duration: 8s; animation-delay:2.5s; }
+    .lock-particles span:nth-child(4)  { left: 36%; font-size:1.8rem; animation-duration:13s; animation-delay:0.6s; }
+    .lock-particles span:nth-child(5)  { left: 48%; font-size:1.2rem; animation-duration:10s; animation-delay:3.2s; }
+    .lock-particles span:nth-child(6)  { left: 58%; font-size:1.5rem; animation-duration:12s; animation-delay:1.9s; }
+    .lock-particles span:nth-child(7)  { left: 69%; font-size:0.8rem; animation-duration: 9s; animation-delay:4.1s; }
+    .lock-particles span:nth-child(8)  { left: 78%; font-size:1.4rem; animation-duration:14s; animation-delay:2.1s; }
+    .lock-particles span:nth-child(9)  { left: 87%; font-size:1.0rem; animation-duration: 7s; animation-delay:0.9s; }
+    .lock-particles span:nth-child(10) { left: 93%; font-size:1.7rem; animation-duration:11s; animation-delay:3.6s; }
+    .lock-content {
+      position: relative;
+      text-align: center;
+      padding: 24px 20px;
+      max-width: 400px;
+      width: 100%;
+    }
+    .lock-icon {
+      font-size: 5.5rem;
+      display: block;
+      margin: 0 auto 28px;
+      animation: iconFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 6px 24px rgba(233,30,140,0.55));
+      transition: transform 0.6s cubic-bezier(.4,0,.2,1), opacity 0.6s ease;
+    }
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0)    rotate(-5deg); }
+      50%       { transform: translateY(-14px) rotate(5deg);  }
+    }
+    .lock-icon.fly-out {
+      transform: translateY(-80px) scale(2.8) rotate(10deg) !important;
+      opacity: 0 !important;
+    }
+    .lock-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3.2rem;
+      color: #fce4ec;
+      text-shadow: 0 2px 16px rgba(233,30,140,0.6);
+      margin-bottom: 8px;
+    }
+    .lock-hint {
+      font-style: italic;
+      font-size: 0.88rem;
+      color: #f48fb1;
+      letter-spacing: 0.05em;
+      margin-bottom: 32px;
+    }
+    .pw-wrap {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .pw-wrap.shake { animation: shake 0.45s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0);   }
+      20%      { transform: translateX(-10px); }
+      40%      { transform: translateX(10px);  }
+      60%      { transform: translateX(-7px);  }
+      80%      { transform: translateX(7px);   }
+    }
+    #pw-input {
+      background: rgba(255,255,255,0.10);
+      border: 1.5px solid rgba(244,143,177,0.45);
+      border-radius: 50px;
+      padding: 13px 24px;
+      font-size: 1rem;
+      font-family: 'Lora', serif;
+      color: #fff;
+      width: 200px;
+      text-align: center;
+      letter-spacing: 0.2em;
+      outline: none;
+      transition: border-color 0.3s, background 0.3s;
+    }
+    #pw-input::placeholder { color: rgba(244,143,177,0.5); letter-spacing: 0.05em; }
+    #pw-input:focus { border-color: #e91e8c; background: rgba(255,255,255,0.16); }
+    #pw-btn {
+      background: linear-gradient(135deg, #c2185b, #e91e8c);
+      border: none;
+      border-radius: 50px;
+      padding: 13px 26px;
+      font-size: 0.95rem;
+      font-family: 'Lora', serif;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 18px rgba(194,24,91,0.45);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    }
+    #pw-btn:hover:not(:disabled)  { transform: scale(1.06); box-shadow: 0 6px 22px rgba(194,24,91,0.55); }
+    #pw-btn:active:not(:disabled) { transform: scale(0.97); }
+    #pw-btn:disabled { opacity: 0.7; cursor: default; }
+    .pw-error {
+      margin-top: 14px;
+      font-size: 0.84rem;
+      font-style: italic;
+      color: #f48fb1;
+      min-height: 1.3em;
+    }
+
+    /* ── envelope wrapper ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 60px 20px 80px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(28px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+    .page.revealed {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* ── petal decorations ── */
+    .petals-top {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      animation: sway 3s ease-in-out infinite alternate;
+    }
+
+    @keyframes sway {
+      from { transform: rotate(-3deg); }
+      to   { transform: rotate(3deg); }
+    }
+
+    /* ── card ── */
+    .card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(233, 30, 140, 0.18);
+      border-radius: 28px;
+      max-width: 720px;
+      width: 100%;
+      padding: 56px 60px 60px;
+      box-shadow:
+        0 8px 40px rgba(194, 24, 91, 0.14),
+        0 2px 10px rgba(194, 24, 91, 0.08),
+        inset 0 0 0 1px rgba(255,255,255,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* pink corner ribbon accents */
+    .card::before,
+    .card::after {
+      content: '';
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(244, 143, 177, 0.3) 0%, transparent 70%);
+    }
+    .card::before { top: -40px; left: -40px; }
+    .card::after  { bottom: -40px; right: -40px; }
+
+    /* ── header ── */
+    .card-header {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+
+    .big-heart {
+      font-size: 3.6rem;
+      display: block;
+      margin-bottom: 12px;
+      animation: heartbeat 1.5s ease-in-out infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1);    }
+      14%       { transform: scale(1.18); }
+      28%       { transform: scale(1);    }
+      42%       { transform: scale(1.12); }
+      70%       { transform: scale(1);    }
+    }
+
+    .to-label {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--pink-soft);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .recipient-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: 4.2rem;
+      color: var(--pink-deep);
+      line-height: 1.1;
+      background: linear-gradient(135deg, #c2185b, #e91e8c, #ad1457);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 32px 0;
+      color: var(--pink-soft);
+      font-size: 1rem;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--pink-soft), transparent);
+    }
+
+    /* ── salutation ── */
+    .salutation {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.1rem;
+      color: var(--pink-deep);
+      margin-bottom: 28px;
+    }
+
+    /* ── body text ── */
+    .letter-body p {
+      font-size: 1.08rem;
+      line-height: 1.92;
+      color: #4a2040;
+      margin-bottom: 22px;
+    }
+
+    .letter-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight {
+      color: var(--pink-deep);
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    /* ── closing ── */
+    .closing {
+      margin-top: 46px;
+      text-align: right;
+    }
+
+    .closing-phrase {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: #8b3a6a;
+      margin-bottom: 6px;
+    }
+
+    .signature {
+      font-family: 'Great Vibes', cursive;
+      font-size: 3rem;
+      color: var(--pink-deep);
+      background: linear-gradient(135deg, #c2185b, #e91e8c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ── date ── */
+    .date-line {
+      margin-top: 6px;
+      font-size: 0.82rem;
+      color: var(--pink-soft);
+      font-style: italic;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── footer hearts ── */
+    .footer-hearts {
+      text-align: center;
+      margin-top: 44px;
+      font-size: 1.5rem;
+      letter-spacing: 8px;
+      animation: pulse-row 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-row {
+      0%, 100% { opacity: 1; transform: scale(1);    }
+      50%       { opacity: 0.7; transform: scale(1.06); }
+    }
+
+    /* ── responsive ── */
+    @media (max-width: 600px) {
+      .card { padding: 36px 28px 40px; }
+      .recipient-name { font-size: 3rem; }
+      .salutation { font-size: 1.7rem; }
+      .signature { font-size: 2.4rem; }
+      .lock-title { font-size: 2.3rem; }
+      #pw-input { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- lock screen -->
+  <div id="lock-screen">
+    <div class="lock-particles">
+      <span>🌸</span><span>💕</span><span>🌷</span><span>💗</span>
+      <span>✨</span><span>💖</span><span>🌸</span><span>💞</span>
+      <span>🌷</span><span>💓</span>
+    </div>
+    <div class="lock-content">
+      <span class="lock-icon" id="lock-icon">💌</span>
+      <h1 class="lock-title">A letter just for you</h1>
+      <p class="lock-hint">Enter the secret to open it...</p>
+      <div class="pw-wrap" id="pw-wrap">
+        <input type="password" id="pw-input" maxlength="20"
+               placeholder="Your secret..." autocomplete="off" />
+        <button id="pw-btn">Open 💕</button>
+      </div>
+      <p id="pw-error" class="pw-error">&nbsp;</p>
+    </div>
+  </div>
+
+  <!-- floating hearts background -->
+  <div class="hearts-bg">
+    <span>🌸</span><span>💕</span><span>🌷</span><span>💗</span>
+    <span>✨</span><span>💖</span><span>🌸</span><span>💞</span>
+    <span>🌷</span><span>💓</span><span>✨</span><span>💝</span>
+  </div>
+
+  <div class="page" id="letter-wrap">
+
+    <div class="petals-top">🌸 🌷 💕 🌷 🌸</div>
+
+    <div class="card">
+
+      <div class="card-header">
+        <span class="big-heart">💗</span>
+        <p class="to-label">A letter for</p>
+        <h1 class="recipient-name">Alicia Paulson</h1>
+      </div>
+
+      <div class="divider">💕</div>
+
+      <p class="salutation">My dearest Boo,</p>
+
+      <div class="letter-body">
+
+        <p>
+          Boo, honestly I don't even know where to start. There's just so much.
+          You are a doctor. You spend your days carrying other people's pain,
+          holding it together when everything is falling apart around you.
+          And then you come home, or I come pick you up, and you're still you.
+          Still warm. Still mine. That still gets me every single time.
+          My bujji boo moley, I see you. All of you.
+        </p>
+
+        <p>
+          The way you look at me sometimes. The way you just... adore me,
+          like I'm something worth adoring. It makes me want to be better.
+          Not for anyone else, just for you. You make me want to be the version
+          of myself that actually deserves to be loved by you. That's real.
+        </p>
+
+        <p>
+          And Stangendhra. 😄 Our car, our little world on wheels.
+          Those late nights and early mornings, just driving to the hospital or back,
+          the city quiet, no agenda, just us talking nonsense or saying nothing at all.
+          I love those drives more than I know how to say.
+          Even just sitting there doing nothing together feels like something.
+          <span class="highlight">I'd do a thousand of those drives and never get tired of it.</span>
+        </p>
+
+        <p>
+          And yes, we fight. Let's just say it. We fight. 😂
+          But then we always find our way back, and somehow we end up laughing
+          at the whole thing, going "wait, why were we even mad?" and turning it
+          into a bit. That's us. That's what I love about us.
+          We don't let things sit heavy for long.
+          <span class="highlight">We choose each other again, every single time.</span>
+        </p>
+
+        <p>
+          Your laugh, your cheeks, those dimples. That look you give me sometimes,
+          that little lip thing you do like you know exactly what you're doing.
+          You are so effortlessly beautiful and I'm not sure you fully realise it.
+          But I do. I notice everything.
+        </p>
+
+        <p>
+          And I miss the chai, Boo. I really do.
+          Coming back from work and you just having it ready, like it was nothing.
+          That small thing meant more than I probably ever told you.
+          It felt like home. <span class="highlight">You feel like home.</span>
+        </p>
+
+        <p>
+          I want to marry you, Boo. I want to grow old with you.
+          Grey hair(already grey only pa), old inside jokes, still roasting each other over evening chai
+          about some fight we had years ago.
+          I want all of it, every ordinary, messy, wonderful bit of it,
+          as long as it's with you.
+        </p>
+
+        <p>
+          Thank you for loving me. Thank you for choosing me every day.💕
+        </p>
+
+      </div>
+
+      <div class="closing">
+        <p class="closing-phrase">Forever yours, always and always.</p>
+        <p class="signature">Dudu</p>
+        <p class="date-line">May 19, 2026 · With all my heart 💗 · Peace ✌️</p>
+      </div>
+
+      <div class="footer-hearts">💕 💗 💖 💗 💕</div>
+
+    </div>
+
+  </div>
+
+  <script src="md5.js"></script>
+  <script>
+    // ── Unlock logic ─────────────────────────────────────────────────
+    const HASH = '779c1db29bbbb09c1dc73fb5d5c48f37';
+
+    const pwInput  = document.getElementById('pw-input');
+    const pwBtn    = document.getElementById('pw-btn');
+    const pwError  = document.getElementById('pw-error');
+    const pwWrap   = document.getElementById('pw-wrap');
+    const lockScr  = document.getElementById('lock-screen');
+    const lockIcon = document.getElementById('lock-icon');
+    const letter   = document.getElementById('letter-wrap');
+
+    function tryUnlock() {
+      const val = pwInput.value;
+      if (!val) return;
+
+      if (md5(val) === HASH) {
+        pwError.textContent = '';
+        pwBtn.disabled = true;
+        pwInput.disabled = true;
+        pwBtn.textContent = 'Opening... 💗';
+
+        // 1. icon flies away
+        lockIcon.classList.add('fly-out');
+
+        // 2. lock screen fades out
+        setTimeout(() => lockScr.classList.add('hide'), 500);
+
+        // 3. reveal letter (no display toggle needed — lock screen covers it)
+        setTimeout(() => letter.classList.add('revealed'), 700);
+
+        // 4. remove lock screen entirely
+        setTimeout(() => lockScr.remove(), 1500);
+
+      } else {
+        pwError.textContent = "That's not it... try again 💔";
+        pwWrap.classList.add('shake');
+        pwInput.value = '';
+        pwInput.focus();
+        setTimeout(() => pwWrap.classList.remove('shake'), 460);
+      }
+    }
+
+    pwBtn.addEventListener('click', tryUnlock);
+    pwInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+    pwInput.focus();
+  </script>
+</body>
+</html>
