@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>For My Boo 🔒</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Quicksand:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Quicksand',system-ui,sans-serif;color:#fff4f7;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 90% at 50% 10%,#5a1f63 0%,#3a1540 40%,#1b0a22 100%);overflow:hidden}
+.hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.hearts span{position:absolute;bottom:-10vh;font-size:1.4rem;opacity:0;animation:up linear infinite}
+@keyframes up{0%{transform:translateY(0) rotate(0);opacity:.6}100%{transform:translateY(-120vh) rotate(40deg);opacity:0}}
+.box{position:relative;z-index:2;width:min(92vw,420px);text-align:center;padding:2.4rem 1.8rem 2rem;border-radius:28px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  box-shadow:0 40px 100px rgba(0,0,0,.5);animation:pop .9s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{opacity:0;transform:scale(.85) translateY(20px)}}
+.lock{font-size:3rem;display:block;margin-bottom:.6rem;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+h1{font-family:'Playfair Display',serif;font-size:1.9rem;margin-bottom:.4rem;
+  background:linear-gradient(120deg,#fff,#ff9ec4,#ffd166);-webkit-background-clip:text;background-clip:text;color:transparent}
+p{opacity:.8;font-size:.95rem;margin-bottom:1.4rem}
+form{display:flex;gap:.5rem}
+input{flex:1;min-width:0;font:600 1.05rem 'Quicksand',sans-serif;letter-spacing:.15em;text-align:center;color:#fff;
+  padding:.9rem 1rem;border-radius:999px;border:1.5px solid rgba(255,158,196,.5);background:rgba(255,255,255,.1);outline:none}
+input:focus{border-color:#ff6b9d;background:rgba(255,255,255,.16)}
+button{font:600 1rem 'Quicksand',sans-serif;border:0;cursor:pointer;color:#2b1030;padding:.9rem 1.2rem;border-radius:999px;
+  background:linear-gradient(120deg,#ffd166,#ff9ec4);box-shadow:0 10px 30px rgba(255,107,157,.4)}
+button:disabled{opacity:.6;cursor:wait}
+.msg{min-height:1.4rem;margin-top:.9rem;font-size:.9rem;color:#ff9ec4}
+.shake{animation:shake .45s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+.hint{font-size:.8rem;opacity:.55;margin-top:1rem}
+</style>
+</head>
+<body>
+<div class="hearts" aria-hidden="true">
+  <span style="left:6%;animation-duration:9s">🩷</span><span style="left:18%;animation-duration:12s;animation-delay:2s">💖</span>
+  <span style="left:31%;animation-duration:10s;animation-delay:1s">🤍</span><span style="left:47%;animation-duration:13s;animation-delay:3s">🩷</span>
+  <span style="left:60%;animation-duration:8s;animation-delay:.5s">💕</span><span style="left:74%;animation-duration:11s;animation-delay:2.5s">🩷</span>
+  <span style="left:88%;animation-duration:14s;animation-delay:4s">💖</span><span style="left:95%;animation-duration:9s;animation-delay:1.5s">🤍</span>
+</div>
+<div class="box">
+  <span class="lock">🔐</span>
+  <h1>For my Boo</h1>
+  <p>Something special is locked inside.<br>Enter the secret word to open it.</p>
+  <form id="f" autocomplete="off">
+    <input id="pw" type="password" placeholder="••••••" autofocus autocapitalize="none" autocorrect="off" spellcheck="false" aria-label="secret word">
+    <button id="go" type="submit">Open 💌</button>
+  </form>
+  <div class="msg" id="msg"></div>
+  <div class="hint">hint: what we call each other 🩷</div>
+</div>
+<script>
+const SALT="{{SALT}}", IV="{{IV}}", ITER={{ITER}}, CT="{{CT}}";
+const b64=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const f=document.getElementById('f'),pw=document.getElementById('pw'),msg=document.getElementById('msg'),go=document.getElementById('go');
+let busy=false;
+f.addEventListener('submit',async e=>{
+  e.preventDefault(); if(busy) return;
+  const val=pw.value.trim().toLowerCase(); if(!val) return;
+  if(!window.crypto||!crypto.subtle){msg.textContent='Open this page over https (or localhost) 🙈';return}
+  busy=true; go.disabled=true; msg.textContent='unlocking…';
+  try{
+    const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(val),'PBKDF2',false,['deriveKey']);
+    const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt:b64(SALT),iterations:ITER,hash:'SHA-256'},km,{name:'AES-GCM',length:256},false,['decrypt']);
+    const pt=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(IV)},key,b64(CT));
+    const html=new TextDecoder().decode(pt);
+    document.open(); document.write(html); document.close();
+  }catch(err){
+    msg.textContent='Not quite, boo… try again 🥺';
+    f.classList.remove('shake'); void f.offsetWidth; f.classList.add('shake');
+    pw.value=''; pw.focus();
+  }finally{busy=false; go.disabled=false}
+});
+</script>
+</body>
+</html>
