@@ -216,7 +216,7 @@
   body.celebrating #sky { pointer-events: auto; }
   /* during the finale, lift the lit picture to the top so the wish never covers it */
   main > * { transition: opacity .6s ease; }
-  body.celebrating main { justify-content: flex-start; }
+  body.celebrating main { justify-content: flex-start; padding-top: max(66px, calc(env(safe-area-inset-top) + 56px)); }
   body.celebrating .how,
   body.celebrating .status,
   body.celebrating main > .row,

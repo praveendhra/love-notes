@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1b0f3f" />
+<title>Light up Deepavali · from Praveendhra</title>
+<meta property="og:title" content="A Deepavali surprise from Praveendhra" />
+<meta property="og:description" content="Put the picture back together and light up the sky." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Catamaran:wght@700;800&family=Yatra+One&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --night: #1b0f3f;
+    --night-deep: #120a2c;
+    --marigold: #f5a623;
+    --turmeric: #ffd54a;
+    --kumkum: #c8102e;
+    --peacock: #0e7c7b;
+    --rangoli: #e84393;
+    --cream: #fff4dc;
+    --gap: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    min-height: 100dvh;
+    background:
+      radial-gradient(120% 70% at 50% 0%, #3b1b66 0%, transparent 60%),
+      radial-gradient(90% 60% at 50% 110%, #5a1530 0%, transparent 65%),
+      var(--night);
+    color: var(--cream);
+    font-family: 'Baloo 2', system-ui, sans-serif;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  main {
+    position: relative;
+    z-index: 2;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+    text-align: center;
+  }
+
+  h1 {
+    font-family: 'Yatra One', serif;
+    font-weight: 400;
+    font-size: clamp(2.1rem, 9vw, 3.2rem);
+    line-height: 1.05;
+    color: var(--turmeric);
+    text-shadow: 0 0 18px rgba(245, 166, 35, .55), 0 2px 0 #7a2b00;
+  }
+  .how {
+    font-size: 1.05rem;
+    line-height: 1.45;
+    max-width: 30ch;
+    color: #f3dcc0;
+  }
+
+  /* the brass thali that holds the puzzle */
+  .thali {
+    position: relative;
+    padding: 12px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 35% 30%, #ffe7a3 0%, #d9a441 35%, #a86e1c 70%, #6e4410 100%);
+    box-shadow: 0 18px 40px rgba(0,0,0,.45), inset 0 0 0 3px rgba(255,240,200,.35);
+    width: min(94vw, 460px, 62dvh);
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+  }
+  .thali::before {
+    content: '';
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    border: 2px dashed rgba(110, 50, 0, .45);
+    pointer-events: none;
+  }
+  .board {
+    position: relative;
+    width: 76%;
+    aspect-ratio: 1;
+    touch-action: none;
+  }
+  .tile {
+    position: absolute;
+    top: 0; left: 0;
+    width: calc((100% - 2 * var(--gap)) / 3);
+    height: calc((100% - 2 * var(--gap)) / 3);
+    border-radius: 10px;
+    background-size: 300% 300%;
+    box-shadow: 0 3px 8px rgba(0,0,0,.45), inset 0 0 0 2px rgba(255,255,255,.12);
+    transition: transform .28s cubic-bezier(.3,1.4,.5,1), box-shadow .25s, border-radius .6s, filter .25s;
+    cursor: grab;
+    will-change: transform;
+  }
+  .tile.selected {
+    box-shadow: 0 0 0 3px var(--turmeric), 0 0 22px rgba(255, 213, 74, .9);
+    filter: brightness(1.15);
+    z-index: 5;
+  }
+  .tile.dragging { transition: box-shadow .2s; z-index: 10; cursor: grabbing; filter: brightness(1.12); }
+  .tile.locked { cursor: default; box-shadow: 0 0 0 2px rgba(255, 213, 74, .85), 0 3px 8px rgba(0,0,0,.4); }
+  .tile.pop { animation: pop .5s ease; }
+  @keyframes pop {
+    0% { filter: brightness(1); }
+    35% { filter: brightness(1.7) saturate(1.3); }
+    100% { filter: brightness(1); }
+  }
+  .board.solved { --gap: 0px; }
+  .board.solved .tile { border-radius: 0; box-shadow: none; }
+  .board.solved .tile:nth-child(1) { border-top-left-radius: 14px; }
+  .board.solved .tile:nth-child(3) { border-top-right-radius: 14px; }
+  .board.solved .tile:nth-child(7) { border-bottom-left-radius: 14px; }
+  .board.solved .tile:nth-child(9) { border-bottom-right-radius: 14px; }
+
+  .peek {
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    background-size: cover;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .25s;
+    z-index: 20;
+    box-shadow: 0 0 0 3px var(--turmeric);
+  }
+  .peek.show { opacity: 1; }
+
+  .glow {
+    position: absolute;
+    left: 63%; top: 46%;
+    width: 46%; aspect-ratio: 1;
+    transform: translate(-50%, -50%) scale(.2);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,240,180,.95) 0%, rgba(255,170,40,.55) 30%, rgba(255,120,0,0) 70%);
+    opacity: 0;
+    pointer-events: none;
+    z-index: 15;
+    mix-blend-mode: screen;
+  }
+  .board.solved .glow {
+    animation: ignite 1s ease-out forwards, flicker 1.6s 1s ease-in-out infinite;
+  }
+  @keyframes ignite {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(.2); }
+    60% { opacity: 1; transform: translate(-50%, -50%) scale(1.6); }
+    100% { opacity: .9; transform: translate(-50%, -50%) scale(1); }
+  }
+  @keyframes flicker {
+    0%, 100% { opacity: .9; transform: translate(-50%, -50%) scale(1); }
+    30% { opacity: .75; transform: translate(-51%, -49%) scale(.94); }
+    60% { opacity: 1; transform: translate(-49%, -51%) scale(1.06); }
+  }
+
+  .status { font-size: 1rem; color: #f3dcc0; min-height: 1.5em; }
+  .status b { color: var(--turmeric); font-weight: 700; }
+
+  .row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  button {
+    font: 600 1rem 'Baloo 2', system-ui, sans-serif;
+    color: var(--night-deep);
+    background: var(--turmeric);
+    border: 0;
+    border-radius: 999px;
+    padding: 10px 20px 8px;
+    box-shadow: 0 3px 0 #a86e1c;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  button:active { transform: translateY(2px); box-shadow: 0 1px 0 #a86e1c; }
+  button.ghost {
+    background: transparent;
+    color: var(--turmeric);
+    box-shadow: inset 0 0 0 2px rgba(255, 213, 74, .6);
+  }
+  button:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+  .credit {
+    font-size: .95rem;
+    color: #d9bfa0;
+  }
+  .credit span { font-family: 'Yatra One', serif; color: var(--marigold); font-size: 1.15rem; }
+
+  .sound {
+    position: fixed;
+    top: max(12px, env(safe-area-inset-top));
+    right: 12px;
+    z-index: 40;
+    width: 44px; height: 44px;
+    padding: 0;
+    font-size: 1.2rem;
+    line-height: 44px;
+    background: rgba(255,255,255,.1);
+    color: var(--cream);
+    box-shadow: none;
+  }
+
+  #sky {
+    position: fixed;
+    inset: 0;
+    width: 100%; height: 100%;
+    z-index: 30;
+    pointer-events: none;
+  }
+  body.celebrating #sky { pointer-events: auto; }
+  /* during the finale, lift the lit picture to the top so the wish never covers it */
+  main > * { transition: opacity .6s ease; }
+  body.celebrating main { justify-content: flex-start; padding-top: max(66px, calc(env(safe-area-inset-top) + 56px)); }
+  body.celebrating .how,
+  body.celebrating .status,
+  body.celebrating main > .row,
+  body.celebrating .credit { display: none; }
+
+  /* the wish that appears after the finale starts */
+  .wish {
+    position: fixed;
+    left: 50%;
+    bottom: max(22px, env(safe-area-inset-bottom));
+    transform: translate(-50%, 40px);
+    width: min(92vw, 420px);
+    z-index: 35;
+    padding: 18px 16px 14px;
+    border-radius: 24px;
+    background: rgba(27, 15, 63, .82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 2px solid rgba(245, 166, 35, .55);
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .8s ease, transform .8s cubic-bezier(.2,1.2,.4,1);
+  }
+  .wish.show { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .wish h2 {
+    font-family: 'Yatra One', serif;
+    font-weight: 400;
+    font-size: clamp(2.2rem, 10vw, 3rem);
+    line-height: 1;
+    color: var(--turmeric);
+    text-shadow: 0 0 20px rgba(245,166,35,.7);
+  }
+  .wish .deva { font-family: 'Catamaran', sans-serif; font-weight: 800; color: var(--rangoli); font-size: 1.3rem; margin-top: 4px; }
+  .wish .row button { padding: 10px 16px 8px; }
+  .wish p { margin: 8px auto 2px; line-height: 1.45; max-width: 32ch; color: #f6e6cf; }
+  .wish .from { margin: 6px 0 14px; color: #d9bfa0; }
+  .wish .from span { font-family: 'Yatra One', serif; color: var(--marigold); font-size: 1.3rem; }
+  .tap-hint { font-size: .85rem; color: #bfa88c; margin-top: 10px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile { transition: transform .01s, box-shadow .2s; }
+    .board.solved .glow { animation: ignite .01s forwards; }
+  }
+  @media (max-height: 640px) {
+    .how { display: none; }
+  }
+</style>
+</head>
+<body>
+  <button class="sound" id="sound" aria-label="Turn sound off">🔊</button>
+
+  <main id="game">
+    <h1>Light up Deepavali</h1>
+    <p class="how">Put the picture back together. Tap two pieces to swap them, or drag one onto another.</p>
+
+    <div class="thali">
+      <div class="board" id="board" aria-label="Puzzle board">
+        <div class="peek" id="peek"></div>
+        <div class="glow"></div>
+      </div>
+    </div>
+
+    <p class="status" id="status" aria-live="polite">&nbsp;</p>
+
+    <div class="row">
+      <button class="ghost" id="peekBtn">Peek at the picture</button>
+    </div>
+
+    <p class="credit">A Deepavali surprise from <span>Praveendhra</span></p>
+  </main>
+
+  <canvas id="sky"></canvas>
+
+  <section class="wish" id="wish" aria-live="polite">
+    <h2>Happy Deepavali</h2>
+    <div class="deva" lang="ta">தீபாவளி நல்வாழ்த்துகள்</div>
+    <p>You lit the diya. May this festival fill your home with light, sweets, and the people you love.</p>
+    <p class="from">With love, <span>Praveendhra</span></p>
+    <div class="row">
+      <button id="moreBtn">Light more fireworks</button>
+      <button class="ghost" id="againBtn">Play again</button>
+    </div>
+    <p class="tap-hint">Tap the sky to launch your own.</p>
+  </section>
+
+<script>
+(() => {
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const board = document.getElementById('board');
+  const peek = document.getElementById('peek');
+  const statusEl = document.getElementById('status');
+  const wish = document.getElementById('wish');
+  const soundBtn = document.getElementById('sound');
+
+  /* ───────────── the picture, painted once ───────────── */
+  function seeded(seed) {
+    return () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  }
+
+  function drawDiya(ctx, cx, cy, s, flameH) {
+    const w = 80 * s;
+    const fx = cx + w * 1.15, fy = cy - 16 * s, fh = flameH * s;
+
+    // warm halo around the flame
+    const halo = ctx.createRadialGradient(fx, fy - fh * .4, 0, fx, fy - fh * .4, 130 * s);
+    halo.addColorStop(0, 'rgba(255,214,120,.55)');
+    halo.addColorStop(1, 'rgba(255,160,40,0)');
+    ctx.fillStyle = halo;
+    ctx.beginPath(); ctx.arc(fx, fy - fh * .4, 130 * s, 0, Math.PI * 2); ctx.fill();
+
+    // clay bowl
+    const bowl = ctx.createLinearGradient(cx, cy, cx, cy + 60 * s);
+    bowl.addColorStop(0, '#d9622a');
+    bowl.addColorStop(1, '#7a2408');
+    ctx.fillStyle = bowl;
+    ctx.beginPath();
+    ctx.moveTo(cx - w, cy);
+    ctx.bezierCurveTo(cx - w * .8, cy + 70 * s, cx + w * .8, cy + 70 * s, cx + w, cy);
+    // spout
+    ctx.quadraticCurveTo(cx + w * 1.25, cy - 10 * s, cx + w * 1.35, cy - 18 * s);
+    ctx.quadraticCurveTo(cx + w * 1.05, cy - 12 * s, cx + w * .9, cy - 8 * s);
+    ctx.closePath();
+    ctx.fill();
+
+    // rim
+    ctx.fillStyle = '#ef8a4a';
+    ctx.beginPath(); ctx.ellipse(cx, cy, w, 13 * s, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#5b1d06';
+    ctx.beginPath(); ctx.ellipse(cx, cy + 1 * s, w * .82, 8 * s, 0, 0, Math.PI * 2); ctx.fill();
+
+    // painted dots on the bowl
+    ctx.fillStyle = '#ffd54a';
+    for (let i = -3; i <= 3; i++) {
+      ctx.beginPath(); ctx.arc(cx + i * 19 * s, cy + 26 * s - Math.abs(i) * 2 * s, 4 * s, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.fillStyle = '#ffffff';
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath(); ctx.arc(cx + i * 26 * s, cy + 40 * s - Math.abs(i) * 3 * s, 2.6 * s, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // flame at the spout
+    const flame = ctx.createRadialGradient(fx, fy - fh * .3, 0, fx, fy - fh * .3, fh * .7);
+    flame.addColorStop(0, '#fffbe6');
+    flame.addColorStop(.35, '#ffd54a');
+    flame.addColorStop(.75, '#ff8a00');
+    flame.addColorStop(1, 'rgba(230,60,0,.85)');
+    ctx.fillStyle = flame;
+    ctx.beginPath();
+    ctx.moveTo(fx, fy);
+    ctx.bezierCurveTo(fx - fh * .38, fy - fh * .2, fx - fh * .12, fy - fh * .7, fx, fy - fh);
+    ctx.bezierCurveTo(fx + fh * .14, fy - fh * .7, fx + fh * .38, fy - fh * .2, fx, fy);
+    ctx.fill();
+  }
+
+  function drawStar(ctx, cx, cy, r, points, inner) {
+    ctx.beginPath();
+    for (let i = 0; i < points * 2; i++) {
+      const rad = i % 2 ? r * inner : r;
+      const a = -Math.PI / 2 + i * Math.PI / points;
+      ctx.lineTo(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad);
+    }
+    ctx.closePath();
+  }
+
+  function paint() {
+    const S = 900, k = S / 600;
+    const c = document.createElement('canvas');
+    c.width = c.height = S;
+    const ctx = c.getContext('2d');
+    ctx.scale(k, k);
+    const rnd = seeded(2026);
+
+    // night sky
+    const bg = ctx.createRadialGradient(300, 330, 40, 300, 330, 470);
+    bg.addColorStop(0, '#4a1f73');
+    bg.addColorStop(.6, '#25104d');
+    bg.addColorStop(1, '#150a34');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, 600, 600);
+
+    // stars
+    for (let i = 0; i < 70; i++) {
+      ctx.fillStyle = `rgba(255,240,210,${.3 + rnd() * .6})`;
+      ctx.beginPath(); ctx.arc(rnd() * 600, rnd() * 300, rnd() * 1.6 + .4, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // crescent moon, top right
+    ctx.fillStyle = '#ffe9a8';
+    ctx.beginPath(); ctx.arc(510, 85, 36, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#1f0d42';
+    ctx.beginPath(); ctx.arc(526, 73, 32, 0, Math.PI * 2); ctx.fill();
+
+    // marigold garland swooping across the top-left
+    const garland = (t) => {
+      const x0 = -10, y0 = 18, cx1 = 170, cy1 = 150, x1 = 380, y1 = 22;
+      const u = 1 - t;
+      return [u * u * x0 + 2 * u * t * cx1 + t * t * x1, u * u * y0 + 2 * u * t * cy1 + t * t * y1];
+    };
+    for (let i = 0; i <= 34; i++) {
+      const [x, y] = garland(i / 34);
+      if (i % 5 === 2) {
+        ctx.fillStyle = '#2e8b3e';
+        ctx.beginPath(); ctx.ellipse(x, y + 16, 6, 14, 0, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.fillStyle = i % 2 ? '#f5a623' : '#ffcc33';
+      ctx.beginPath(); ctx.arc(x, y, 11, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(160,70,0,.5)';
+      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+    }
+    // hanging strand at the end of the garland
+    for (let i = 0; i < 6; i++) {
+      ctx.fillStyle = i % 2 ? '#f5a623' : '#ff7a1a';
+      ctx.beginPath(); ctx.arc(380, 34 + i * 17, 9, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // star lantern (kandil) on the right
+    ctx.strokeStyle = '#d9a441'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(505, 125); ctx.lineTo(505, 205); ctx.stroke();
+    const lg = ctx.createRadialGradient(505, 255, 5, 505, 255, 70);
+    lg.addColorStop(0, 'rgba(255,120,190,.6)'); lg.addColorStop(1, 'rgba(255,120,190,0)');
+    ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(505, 255, 70, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#e84393'; drawStar(ctx, 505, 255, 52, 5, .5); ctx.fill();
+    ctx.fillStyle = '#ffd54a'; drawStar(ctx, 505, 257, 26, 5, .5); ctx.fill();
+    ctx.strokeStyle = '#ffd54a'; ctx.lineWidth = 3;
+    for (let i = -2; i <= 2; i++) {
+      ctx.beginPath(); ctx.moveTo(505 + i * 7, 290); ctx.lineTo(505 + i * 9, 345); ctx.stroke();
+    }
+
+    // rangoli under the main diya
+    const rx = 300, ry = 385;
+    const ring = (r, n, len, wid, color, rot) => {
+      ctx.fillStyle = color;
+      for (let i = 0; i < n; i++) {
+        const a = rot + i * Math.PI * 2 / n;
+        ctx.save();
+        ctx.translate(rx + Math.cos(a) * r, ry + Math.sin(a) * r * .62);
+        ctx.rotate(a + Math.PI / 2);
+        ctx.beginPath(); ctx.ellipse(0, 0, wid, len, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.restore();
+      }
+    };
+    ctx.fillStyle = 'rgba(255,255,255,.08)';
+    ctx.beginPath(); ctx.ellipse(rx, ry, 205, 128, 0, 0, Math.PI * 2); ctx.fill();
+    ring(180, 22, 20, 9, '#e84393', 0);
+    ring(145, 18, 17, 8, '#ffd54a', .17);
+    ring(110, 16, 14, 7, '#0e9b98', 0);
+    ring(78, 12, 11, 6, '#ff6a2a', .26);
+    ctx.fillStyle = '#ffffff';
+    for (let i = 0; i < 40; i++) {
+      const a = i * Math.PI * 2 / 40;
+      ctx.beginPath(); ctx.arc(rx + Math.cos(a) * 200, ry + Math.sin(a) * 124, 3, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // small diyas: one middle-left, one bottom-left
+    drawDiya(ctx, 70, 300, .55, 52);
+    drawDiya(ctx, 80, 470, .5, 48);
+
+    // ladoos on the bottom-right
+    const ladoo = (x, y) => {
+      const g = ctx.createRadialGradient(x - 6, y - 6, 2, x, y, 18);
+      g.addColorStop(0, '#ffe08a'); g.addColorStop(1, '#e08a00');
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI * 2); ctx.fill();
+    };
+    ctx.fillStyle = '#c0c0c8';
+    ctx.beginPath(); ctx.ellipse(510, 478, 66, 18, 0, 0, Math.PI * 2); ctx.fill();
+    ladoo(486, 462); ladoo(530, 462); ladoo(508, 440);
+
+    // the main diya, centre stage
+    drawDiya(ctx, 280, 335, 1.05, 105);
+
+    // greeting along the bottom
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'alphabetic';
+    ctx.font = '800 60px "Catamaran", sans-serif';
+    ctx.shadowColor = 'rgba(245,166,35,.85)';
+    ctx.shadowBlur = 18;
+    ctx.fillStyle = '#ffd54a';
+    ctx.fillText('இனிய தீபாவளி', 300, 580);
+    ctx.shadowBlur = 0;
+
+    return c.toDataURL('image/jpeg', .9);
+  }
+
+  /* ───────────── sound (made on the fly, no files) ───────────── */
+  let actx = null, muted = false;
+  function audio() {
+    if (muted) return null;
+    if (!actx) {
+      try { actx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return null; }
+    }
+    if (actx.state === 'suspended') actx.resume();
+    return actx;
+  }
+  function noiseBuffer(a, secs) {
+    const buf = a.createBuffer(1, Math.max(1, Math.floor(a.sampleRate * secs)), a.sampleRate);
+    const d = buf.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+    return buf;
+  }
+  function boom(power = 1) {
+    const a = audio(); if (!a) return;
+    const src = a.createBufferSource(); src.buffer = noiseBuffer(a, 1.4);
+    const f = a.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 500 + Math.random() * 400;
+    const g = a.createGain();
+    const t = a.currentTime;
+    g.gain.setValueAtTime(.55 * power, t);
+    g.gain.exponentialRampToValueAtTime(.001, t + 1.3);
+    src.connect(f).connect(g).connect(a.destination);
+    src.start(t);
+  }
+  function crackle() {
+    const a = audio(); if (!a) return;
+    const t0 = a.currentTime + .25;
+    for (let i = 0; i < 10; i++) {
+      const src = a.createBufferSource(); src.buffer = noiseBuffer(a, .04);
+      const f = a.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = 2500;
+      const g = a.createGain();
+      const t = t0 + Math.random() * .6;
+      g.gain.setValueAtTime(.12, t); g.gain.exponentialRampToValueAtTime(.001, t + .04);
+      src.connect(f).connect(g).connect(a.destination);
+      src.start(t);
+    }
+  }
+  function whistle() {
+    const a = audio(); if (!a) return;
+    const o = a.createOscillator(); const g = a.createGain();
+    const t = a.currentTime;
+    o.type = 'sine';
+    o.frequency.setValueAtTime(900, t);
+    o.frequency.exponentialRampToValueAtTime(2200, t + .7);
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.exponentialRampToValueAtTime(.04, t + .1);
+    g.gain.exponentialRampToValueAtTime(.0001, t + .75);
+    o.connect(g).connect(a.destination);
+    o.start(t); o.stop(t + .8);
+  }
+  function chime(notes) {
+    const a = audio(); if (!a) return;
+    notes.forEach((freq, i) => {
+      const o = a.createOscillator(); const g = a.createGain();
+      const t = a.currentTime + i * .09;
+      o.type = 'triangle'; o.frequency.value = freq;
+      g.gain.setValueAtTime(.0001, t);
+      g.gain.exponentialRampToValueAtTime(.18, t + .02);
+      g.gain.exponentialRampToValueAtTime(.0001, t + .6);
+      o.connect(g).connect(a.destination);
+      o.start(t); o.stop(t + .65);
+    });
+  }
+  const buzz = (p) => { try { navigator.vibrate && navigator.vibrate(p); } catch (e) {} };
+
+  soundBtn.addEventListener('click', () => {
+    muted = !muted;
+    soundBtn.textContent = muted ? '🔈' : '🔊';
+    soundBtn.setAttribute('aria-label', muted ? 'Turn sound on' : 'Turn sound off');
+    if (muted && actx) actx.suspend();
+  });
+
+  /* ───────────── puzzle ───────────── */
+  const N = 3;
+  const tiles = [];     // tile elements, index = correct slot
+  const slotOf = [];    // slotOf[tileId] = current slot
+  let selected = null;
+  let solved = false;
+
+  function place(id, dx = 0, dy = 0) {
+    const s = slotOf[id];
+    const c = s % N, r = Math.floor(s / N);
+    tiles[id].style.transform =
+      `translate(calc(${c} * (100% + var(--gap)) + ${dx}px), calc(${r} * (100% + var(--gap)) + ${dy}px))`;
+  }
+
+  function shuffle() {
+    // random arrangement where no piece starts in its home spot
+    let order;
+    do {
+      order = [...Array(N * N).keys()];
+      for (let i = order.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [order[i], order[j]] = [order[j], order[i]];
+      }
+    } while (order.some((v, i) => v === i));
+    order.forEach((slot, id) => { slotOf[id] = slot; });
+  }
+
+  function isLocked(id) { return slotOf[id] === id; }
+  function tileAtSlot(s) { return slotOf.indexOf(s); }
+
+  function updateStatus() {
+    const done = slotOf.filter((s, id) => s === id).length;
+    statusEl.innerHTML = solved ? '<b>All 9 pieces in place!</b>'
+      : done === 0 ? 'A gold edge means a piece is home.'
+      : `<b>${done} of 9</b> pieces in place`;
+  }
+
+  function swap(a, b) {
+    [slotOf[a], slotOf[b]] = [slotOf[b], slotOf[a]];
+    place(a); place(b);
+    let newlyLocked = 0;
+    [a, b].forEach(id => {
+      if (isLocked(id)) {
+        newlyLocked++;
+        const t = tiles[id];
+        t.classList.add('locked');
+        t.classList.remove('pop'); void t.offsetWidth; t.classList.add('pop');
+      }
+    });
+    if (newlyLocked) { chime(newlyLocked > 1 ? [784, 988, 1175] : [784, 1175]); buzz(25); }
+    if (slotOf.every((s, id) => s === id)) win();
+    updateStatus();
+  }
+
+  function select(id) {
+    if (selected !== null) tiles[selected].classList.remove('selected');
+    selected = id;
+    if (id !== null) tiles[id].classList.add('selected');
+  }
+
+  function slotFromPoint(x, y) {
+    const r = board.getBoundingClientRect();
+    if (x < r.left || x > r.right || y < r.top || y > r.bottom) return -1;
+    const c = Math.min(N - 1, Math.floor((x - r.left) / (r.width / N)));
+    const rr = Math.min(N - 1, Math.floor((y - r.top) / (r.height / N)));
+    return rr * N + c;
+  }
+
+  function build(img) {
+    peek.style.backgroundImage = `url(${img})`;
+    for (let id = 0; id < N * N; id++) {
+      const t = document.createElement('div');
+      t.className = 'tile';
+      t.style.backgroundImage = `url(${img})`;
+      t.style.backgroundPosition = `${(id % N) * 50}% ${Math.floor(id / N) * 50}%`;
+      t.dataset.id = id;
+      board.insertBefore(t, peek);
+      tiles.push(t);
+      attach(t, id);
+    }
+    reset();
+  }
+
+  function reset() {
+    solved = false;
+    board.classList.remove('solved');
+    shuffle();
+    tiles.forEach((t, id) => { t.classList.remove('locked', 'selected', 'pop'); place(id); });
+    select(null);
+    updateStatus();
+  }
+
+  function attach(t, id) {
+    let start = null, dragging = false;
+    t.addEventListener('pointerdown', e => {
+      audio(); // unlock audio on first touch
+      if (solved || isLocked(id)) return;
+      start = { x: e.clientX, y: e.clientY };
+      dragging = false;
+      t.setPointerCapture(e.pointerId);
+    });
+    t.addEventListener('pointermove', e => {
+      if (!start) return;
+      const dx = e.clientX - start.x, dy = e.clientY - start.y;
+      if (!dragging && Math.hypot(dx, dy) > 8) {
+        dragging = true;
+        select(null);
+        t.classList.add('dragging');
+      }
+      if (dragging) place(id, dx, dy);
+    });
+    const end = e => {
+      if (!start) return;
+      t.classList.remove('dragging');
+      if (dragging) {
+        const target = tileAtSlot(slotFromPoint(e.clientX, e.clientY));
+        if (target >= 0 && target !== id && !isLocked(target)) swap(id, target);
+        else place(id);
+      } else if (selected === null) {
+        select(id);
+      } else if (selected === id) {
+        select(null);
+      } else {
+        const other = selected;
+        select(null);
+        swap(other, id);
+      }
+      start = null; dragging = false;
+    };
+    t.addEventListener('pointerup', end);
+    t.addEventListener('pointercancel', () => {
+      if (!start) return;
+      t.classList.remove('dragging'); place(id); start = null; dragging = false;
+    });
+  }
+
+  let peekTimer;
+  document.getElementById('peekBtn').addEventListener('click', () => {
+    peek.classList.add('show');
+    clearTimeout(peekTimer);
+    peekTimer = setTimeout(() => peek.classList.remove('show'), 1800);
+  });
+
+  /* ───────────── fireworks ───────────── */
+  const sky = document.getElementById('sky');
+  const sctx = sky.getContext('2d');
+  let W = 0, H = 0, dpr = 1;
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    sky.width = W * dpr; sky.height = H * dpr;
+    sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  addEventListener('resize', resize);
+  resize();
+
+  const PALETTES = [
+    ['#ffd54a', '#fff4dc', '#f5a623'],
+    ['#e84393', '#ff9ccf', '#fff4dc'],
+    ['#2ee6d6', '#0e9b98', '#fff4dc'],
+    ['#ff4d4d', '#ffd54a', '#ff8a00'],
+    ['#b388ff', '#e84393', '#ffffff'],
+    ['#7cfc00', '#ffd54a', '#ffffff'],
+  ];
+  const rockets = [], sparks = [];
+  let running = false, showTimer = null;
+  const scale = reduceMotion ? .4 : 1;
+
+  function launch(tx, ty) {
+    const x = tx ?? W * (.15 + Math.random() * .7);
+    const y = ty ?? H * (.12 + Math.random() * .35);
+    const sx = x + (Math.random() - .5) * W * .2;
+    rockets.push({
+      x: sx, y: H + 10,
+      tx: x, ty: y,
+      vx: (x - sx) / 55,
+      vy: -(H + 10 - y) / 55,
+      life: 55,
+      pal: PALETTES[Math.floor(Math.random() * PALETTES.length)],
+    });
+    whistle();
+    startLoop();
+  }
+
+  function burst(r) {
+    const type = ['peony', 'ring', 'willow', 'crackle', 'peony'][Math.floor(Math.random() * 5)];
+    const count = Math.round((type === 'ring' ? 70 : 110) * scale);
+    const base = Math.min(W, H) / 110;
+    for (let i = 0; i < count; i++) {
+      const a = (i / count) * Math.PI * 2 + Math.random() * .05;
+      const sp = type === 'ring' ? base * 1.5 : base * (.4 + Math.random() * 1.3);
+      const life = type === 'willow' ? 110 + Math.random() * 40 : 60 + Math.random() * 30;
+      sparks.push({
+        x: r.tx, y: r.ty,
+        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+        color: r.pal[i % r.pal.length],
+        life, max: life,
+        g: type === 'willow' ? .05 : .035,
+        drag: type === 'willow' ? .975 : .965,
+        crackle: type === 'crackle',
+        size: type === 'willow' ? 1.6 : 2.2,
+      });
+    }
+    boom(type === 'ring' ? .8 : 1);
+    if (type === 'crackle') crackle();
+    buzz(15);
+  }
+
+  // ground fountains (anar) during the opening moment
+  let fountainUntil = 0;
+  function fountain() {
+    const n = Math.round(6 * scale);
+    [W * .12, W * .88].forEach(fx => {
+      for (let i = 0; i < n; i++) {
+        const a = -Math.PI / 2 + (Math.random() - .5) * .5;
+        const sp = Math.min(W, H) / 70 * (.6 + Math.random() * .6);
+        sparks.push({
+          x: fx, y: H, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+          color: Math.random() < .5 ? '#ffd54a' : '#fff4dc',
+          life: 50 + Math.random() * 20, max: 70, g: .12, drag: .99, crackle: false, size: 1.6,
+        });
+      }
+    });
+  }
+
+  function frame() {
+    // fade the previous frame to transparent so trails linger over the page
+    sctx.globalCompositeOperation = 'destination-out';
+    sctx.fillStyle = 'rgba(0,0,0,.22)';
+    sctx.fillRect(0, 0, W, H);
+    sctx.globalCompositeOperation = 'lighter';
+
+    if (performance.now() < fountainUntil) fountain();
+
+    for (let i = rockets.length - 1; i >= 0; i--) {
+      const r = rockets[i];
+      r.x += r.vx; r.y += r.vy; r.life--;
+      sctx.fillStyle = '#ffe9a8';
+      sctx.beginPath(); sctx.arc(r.x, r.y, 2.4, 0, Math.PI * 2); sctx.fill();
+      sparks.push({ x: r.x, y: r.y, vx: (Math.random() - .5) * .6, vy: 1, color: '#f5a623', life: 18, max: 18, g: .02, drag: .95, size: 1.4 });
+      if (r.life <= 0) { burst(r); rockets.splice(i, 1); }
+    }
+    for (let i = sparks.length - 1; i >= 0; i--) {
+      const p = sparks[i];
+      p.vx *= p.drag; p.vy = p.vy * p.drag + p.g;
+      p.x += p.vx; p.y += p.vy; p.life--;
+      if (p.crackle && p.life < p.max * .45 && Math.random() < .3) {
+        sctx.globalAlpha = 1;
+        sctx.fillStyle = '#ffffff';
+        sctx.fillRect(p.x, p.y, 2.5, 2.5);
+      }
+      sctx.globalAlpha = Math.max(0, p.life / p.max);
+      sctx.fillStyle = p.color;
+      sctx.beginPath(); sctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); sctx.fill();
+      if (p.life <= 0) sparks.splice(i, 1);
+    }
+    sctx.globalAlpha = 1;
+
+    if (rockets.length || sparks.length || performance.now() < fountainUntil) {
+      requestAnimationFrame(frame);
+    } else {
+      running = false;
+      sctx.globalCompositeOperation = 'source-over';
+      sctx.clearRect(0, 0, W, H);
+    }
+  }
+  function startLoop() {
+    if (!running) { running = true; requestAnimationFrame(frame); }
+  }
+
+  function show(seconds) {
+    clearInterval(showTimer);
+    const until = performance.now() + seconds * 1000;
+    const gap = reduceMotion ? 900 : 330;
+    for (let i = 0; i < 3; i++) setTimeout(() => launch(), i * 160);
+    showTimer = setInterval(() => {
+      if (performance.now() > until) {
+        clearInterval(showTimer);
+        // keep a gentle sprinkle going while the wish is open
+        showTimer = setInterval(() => launch(), 1800);
+        return;
+      }
+      launch();
+      if (Math.random() < .35) setTimeout(() => launch(), 120);
+    }, gap);
+  }
+
+  /* ───────────── the finale ───────────── */
+  function win() {
+    solved = true;
+    select(null);
+    board.classList.add('solved');
+    chime([523, 659, 784, 1047]);
+    buzz([40, 60, 40, 60, 120]);
+    setTimeout(() => {
+      document.body.classList.add('celebrating');
+      fountainUntil = performance.now() + 3500;
+      startLoop();
+      show(9);
+    }, 900);
+    setTimeout(() => wish.classList.add('show'), 2200);
+  }
+
+  sky.addEventListener('pointerdown', e => launch(e.clientX, e.clientY));
+  document.getElementById('moreBtn').addEventListener('click', () => {
+    fountainUntil = performance.now() + 2500;
+    startLoop();
+    show(6);
+  });
+  document.getElementById('againBtn').addEventListener('click', () => {
+    clearInterval(showTimer);
+    wish.classList.remove('show');
+    document.body.classList.remove('celebrating');
+    reset();
+  });
+
+  // preview helper: run __solve() in the console to jump to the finale
+  window.__solve = () => tiles.forEach((_, id) => { slotOf[id] = id; place(id); tiles[id].classList.add('locked'); }) || win();
+
+  /* ───────────── start: wait for the fonts so the picture's lettering is right ───────────── */
+  const fontsReady = document.fonts
+    ? Promise.race([Promise.all([document.fonts.load('64px "Yatra One"'), document.fonts.load('800 60px "Catamaran"', 'இனிய தீபாவளி')]), new Promise(r => setTimeout(r, 2500))])
+    : Promise.resolve();
+  fontsReady.then(() => build(paint()));
+})();
+</script>
+</body>
+</html>
