@@ -5,6 +5,7 @@
 |------|-----|
 | May 2026 | https://love-notes.praveendhra.com/boo_051926.html |
 | Birthday, Oct 24 2026 | https://love-notes.praveendhra.com/boo_102426.html |
+| Diwali 2026 puzzle (from Murali Krishna, public) | https://love-notes.praveendhra.com/diwali_2026.html |
 
 ## Building an encrypted card (`boo_102426` style)
 
