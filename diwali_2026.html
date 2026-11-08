@@ -3,17 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<meta name="theme-color" content="#1b0f3f" />
-<title>Light up Diwali · from Murali Krishna</title>
-<meta property="og:title" content="A Diwali surprise from Murali Krishna" />
+<meta name="theme-color" content="#2a0712" />
+<title>Light up Deepavali · from Murali Krishna</title>
+<meta property="og:title" content="A Deepavali surprise from Murali Krishna" />
 <meta property="og:description" content="Put the picture back together and light up the sky." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Yatra+One&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700&family=Catamaran:wght@700;800&family=Yatra+One&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --night: #1b0f3f;
-    --night-deep: #120a2c;
+    --night: #2a0712;
+    --night-deep: #1c040b;
+    --silk: #6d1430;
+    --leaf: #2e7d32;
+    --jasmine: #fffaf0;
     --marigold: #f5a623;
     --turmeric: #ffd54a;
     --kumkum: #c8102e;
@@ -27,8 +30,8 @@
   body {
     min-height: 100dvh;
     background:
-      radial-gradient(120% 70% at 50% 0%, #3b1b66 0%, transparent 60%),
-      radial-gradient(90% 60% at 50% 110%, #5a1530 0%, transparent 65%),
+      radial-gradient(120% 70% at 50% 0%, #7a1736 0%, transparent 60%),
+      radial-gradient(90% 60% at 50% 110%, #4a0c1c 0%, transparent 65%),
       var(--night);
     color: var(--cream);
     font-family: 'Baloo 2', system-ui, sans-serif;
@@ -36,6 +39,19 @@
     user-select: none;
     -webkit-user-select: none;
   }
+
+  /* gold zari borders, like the edge of a silk saree */
+  body::before, body::after {
+    content: '';
+    position: fixed;
+    left: 0; right: 0;
+    height: 18px;
+    z-index: 3;
+    pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='18'%3E%3Crect width='24' height='18' fill='%23d9a441'/%3E%3Cpath d='M0 18 L12 6 L24 18Z' fill='%237a1530'/%3E%3Ccircle cx='12' cy='13' r='2' fill='%23ffe08a'/%3E%3Crect width='24' height='2' fill='%23ffe7a3'/%3E%3C/svg%3E") repeat-x;
+  }
+  body::before { top: 0; }
+  body::after { bottom: 0; transform: scaleY(-1); }
 
   main {
     position: relative;
@@ -46,7 +62,7 @@
     align-items: center;
     justify-content: center;
     gap: 14px;
-    padding: max(18px, env(safe-area-inset-top)) 16px max(18px, env(safe-area-inset-bottom));
+    padding: max(32px, calc(env(safe-area-inset-top) + 20px)) 16px max(32px, calc(env(safe-area-inset-bottom) + 20px));
     text-align: center;
   }
 
@@ -56,7 +72,7 @@
     font-size: clamp(2.1rem, 9vw, 3.2rem);
     line-height: 1.05;
     color: var(--turmeric);
-    text-shadow: 0 0 18px rgba(245, 166, 35, .55), 0 2px 0 #7a2b00;
+    text-shadow: 0 0 18px rgba(245, 166, 35, .55), 0 2px 0 #5a0a1a;
   }
   .how {
     font-size: 1.05rem;
@@ -139,7 +155,7 @@
 
   .glow {
     position: absolute;
-    left: 63%; top: 46%;
+    left: 62%; top: 57%;
     width: 46%; aspect-ratio: 1;
     transform: translate(-50%, -50%) scale(.2);
     border-radius: 50%;
@@ -226,16 +242,16 @@
   .wish {
     position: fixed;
     left: 50%;
-    bottom: max(22px, env(safe-area-inset-bottom));
+    bottom: max(28px, calc(env(safe-area-inset-bottom) + 22px));
     transform: translate(-50%, 40px);
     width: min(92vw, 420px);
     z-index: 35;
     padding: 18px 16px 14px;
     border-radius: 24px;
-    background: rgba(27, 15, 63, .82);
+    background: rgba(42, 7, 18, .88);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    border: 2px solid rgba(245, 166, 35, .55);
+    border: 2px solid rgba(217, 164, 65, .8);
     text-align: center;
     opacity: 0;
     pointer-events: none;
@@ -250,7 +266,7 @@
     color: var(--turmeric);
     text-shadow: 0 0 20px rgba(245,166,35,.7);
   }
-  .wish .deva { font-family: 'Yatra One', serif; color: var(--rangoli); font-size: 1.3rem; margin-top: 4px; }
+  .wish .deva { font-family: 'Catamaran', sans-serif; font-weight: 800; color: var(--rangoli); font-size: 1.3rem; margin-top: 4px; }
   .wish .row button { padding: 10px 16px 8px; }
   .wish p { margin: 8px auto 2px; line-height: 1.45; max-width: 32ch; color: #f6e6cf; }
   .wish .from { margin: 6px 0 14px; color: #d9bfa0; }
@@ -270,7 +286,7 @@
   <button class="sound" id="sound" aria-label="Turn sound off">🔊</button>
 
   <main id="game">
-    <h1>Light up Diwali</h1>
+    <h1>Light up Deepavali</h1>
     <p class="how">Put the picture back together. Tap two pieces to swap them, or drag one onto another.</p>
 
     <div class="thali">
@@ -286,15 +302,15 @@
       <button class="ghost" id="peekBtn">Peek at the picture</button>
     </div>
 
-    <p class="credit">A Diwali surprise from <span>Murali Krishna</span></p>
+    <p class="credit">A Deepavali surprise from <span>Murali Krishna</span></p>
   </main>
 
   <canvas id="sky"></canvas>
 
   <section class="wish" id="wish" aria-live="polite">
-    <h2>Happy Diwali</h2>
-    <div class="deva">शुभ दीपावली</div>
-    <p>You lit the diya. May this festival fill your home with light, sweets, and the people you love.</p>
+    <h2>Happy Deepavali</h2>
+    <div class="deva" lang="ta">தீபாவளி நல்வாழ்த்துகள்</div>
+    <p>You lit the vilakku. May this Deepavali bring you new clothes, murukku, crackers, and the people you love.</p>
     <p class="from">With love, <span>Murali Krishna</span></p>
     <div class="row">
       <button id="moreBtn">Light more fireworks</button>
@@ -320,13 +336,6 @@
   function drawDiya(ctx, cx, cy, s, flameH) {
     const w = 80 * s;
     const fx = cx + w * 1.15, fy = cy - 16 * s, fh = flameH * s;
-
-    // warm halo around the flame
-    const halo = ctx.createRadialGradient(fx, fy - fh * .4, 0, fx, fy - fh * .4, 130 * s);
-    halo.addColorStop(0, 'rgba(255,214,120,.55)');
-    halo.addColorStop(1, 'rgba(255,160,40,0)');
-    ctx.fillStyle = halo;
-    ctx.beginPath(); ctx.arc(fx, fy - fh * .4, 130 * s, 0, Math.PI * 2); ctx.fill();
 
     // clay bowl
     const bowl = ctx.createLinearGradient(cx, cy, cx, cy + 60 * s);
@@ -358,7 +367,15 @@
       ctx.beginPath(); ctx.arc(cx + i * 26 * s, cy + 40 * s - Math.abs(i) * 3 * s, 2.6 * s, 0, Math.PI * 2); ctx.fill();
     }
 
-    // flame at the spout
+    drawFlame(ctx, fx, fy, fh);
+  }
+
+  function drawFlame(ctx, fx, fy, fh) {
+    const halo = ctx.createRadialGradient(fx, fy - fh * .45, 0, fx, fy - fh * .45, fh * 1.3);
+    halo.addColorStop(0, 'rgba(255,214,120,.5)');
+    halo.addColorStop(1, 'rgba(255,160,40,0)');
+    ctx.fillStyle = halo;
+    ctx.beginPath(); ctx.arc(fx, fy - fh * .45, fh * 1.3, 0, Math.PI * 2); ctx.fill();
     const flame = ctx.createRadialGradient(fx, fy - fh * .3, 0, fx, fy - fh * .3, fh * .7);
     flame.addColorStop(0, '#fffbe6');
     flame.addColorStop(.35, '#ffd54a');
@@ -372,14 +389,72 @@
     ctx.fill();
   }
 
-  function drawStar(ctx, cx, cy, r, points, inner) {
+  // brass kuthu vilakku: base, stem, five-wick bowl, kalasam on top
+  function drawKuthuVilakku(ctx, x, top, bottom) {
+    const brass = (x0, x1) => {
+      const g = ctx.createLinearGradient(x0, 0, x1, 0);
+      g.addColorStop(0, '#6e4410'); g.addColorStop(.32, '#ffe08a');
+      g.addColorStop(.55, '#d9a441'); g.addColorStop(1, '#5c370c');
+      return g;
+    };
+    const b = top + 62; // bowl rim height
+
+    // base dome
+    ctx.fillStyle = brass(x - 50, x + 50);
     ctx.beginPath();
-    for (let i = 0; i < points * 2; i++) {
-      const rad = i % 2 ? r * inner : r;
-      const a = -Math.PI / 2 + i * Math.PI / points;
-      ctx.lineTo(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad);
+    ctx.moveTo(x - 50, bottom);
+    ctx.bezierCurveTo(x - 46, bottom - 34, x - 10, bottom - 40, x - 8, bottom - 58);
+    ctx.lineTo(x + 8, bottom - 58);
+    ctx.bezierCurveTo(x + 10, bottom - 40, x + 46, bottom - 34, x + 50, bottom);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x, bottom, 50, 9, 0, 0, Math.PI * 2); ctx.fill();
+
+    // stem with rings
+    ctx.fillStyle = brass(x - 6, x + 6);
+    ctx.fillRect(x - 5, b + 14, 10, bottom - 58 - (b + 14));
+    ctx.fillStyle = brass(x - 12, x + 12);
+    for (let y = b + 34; y < bottom - 60; y += 34) {
+      ctx.beginPath(); ctx.ellipse(x, y, 11, 5, 0, 0, Math.PI * 2); ctx.fill();
     }
-    ctx.closePath();
+
+    // bowl
+    ctx.fillStyle = brass(x - 46, x + 46);
+    ctx.beginPath();
+    ctx.moveTo(x - 44, b);
+    ctx.bezierCurveTo(x - 38, b + 26, x + 38, b + 26, x + 44, b);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#f2c45e';
+    ctx.beginPath(); ctx.ellipse(x, b, 44, 9, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#7a4e12';
+    ctx.beginPath(); ctx.ellipse(x, b + 1, 36, 6, 0, 0, Math.PI * 2); ctx.fill();
+
+    // kalasam finial on a slim rod
+    ctx.fillStyle = brass(x - 4, x + 4);
+    ctx.fillRect(x - 2.5, top + 8, 5, b - top - 8);
+    ctx.fillStyle = brass(x - 12, x + 12);
+    ctx.beginPath(); ctx.ellipse(x, top + 14, 11, 12, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - 5, top + 4); ctx.lineTo(x, top - 12); ctx.lineTo(x + 5, top + 4); ctx.fill();
+
+    // five wicks, front ones larger
+    [[-44, -1, 22], [-24, 6, 26], [0, 9, 30], [24, 6, 26], [44, -1, 22]]
+      .forEach(([dx, dy, h]) => drawFlame(ctx, x + dx, b + dy, h));
+  }
+
+  function drawMurukku(ctx, cx, cy, r) {
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = '#c98a3c';
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    for (let t = 0; t <= Math.PI * 6; t += .15) {
+      const rr = 2 + (t / (Math.PI * 6)) * r;
+      ctx.lineTo(cx + Math.cos(t) * rr, cy + Math.sin(t) * rr * .75);
+    }
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(110,60,10,.55)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([2, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
   }
 
   function paint() {
@@ -390,112 +465,146 @@
     ctx.scale(k, k);
     const rnd = seeded(2026);
 
-    // night sky
-    const bg = ctx.createRadialGradient(300, 330, 40, 300, 330, 470);
-    bg.addColorStop(0, '#4a1f73');
-    bg.addColorStop(.6, '#25104d');
-    bg.addColorStop(1, '#150a34');
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, 600, 600);
-
-    // stars
-    for (let i = 0; i < 70; i++) {
+    // night sky over the porch
+    const sky = ctx.createLinearGradient(0, 0, 0, 300);
+    sky.addColorStop(0, '#1f0f45');
+    sky.addColorStop(1, '#4a1a52');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, 600, 300);
+    for (let i = 0; i < 60; i++) {
       ctx.fillStyle = `rgba(255,240,210,${.3 + rnd() * .6})`;
-      ctx.beginPath(); ctx.arc(rnd() * 600, rnd() * 300, rnd() * 1.6 + .4, 0, Math.PI * 2); ctx.fill();
+      ctx.beginPath(); ctx.arc(rnd() * 600, 60 + rnd() * 220, rnd() * 1.5 + .4, 0, Math.PI * 2); ctx.fill();
     }
 
-    // crescent moon, top right
+    // red-oxide floor
+    const floor = ctx.createLinearGradient(0, 300, 0, 600);
+    floor.addColorStop(0, '#5e1610');
+    floor.addColorStop(1, '#8c2a17');
+    ctx.fillStyle = floor;
+    ctx.fillRect(0, 300, 600, 300);
+    ctx.fillStyle = 'rgba(255,200,160,.08)';
+    ctx.fillRect(0, 300, 600, 4);
+
+    // crescent moon
     ctx.fillStyle = '#ffe9a8';
-    ctx.beginPath(); ctx.arc(510, 85, 36, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#1f0d42';
-    ctx.beginPath(); ctx.arc(526, 73, 32, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(440, 112, 26, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#2a1350';
+    ctx.beginPath(); ctx.arc(452, 103, 23, 0, Math.PI * 2); ctx.fill();
 
-    // marigold garland swooping across the top-left
-    const garland = (t) => {
-      const x0 = -10, y0 = 18, cx1 = 170, cy1 = 150, x1 = 380, y1 = 22;
-      const u = 1 - t;
-      return [u * u * x0 + 2 * u * t * cx1 + t * t * x1, u * u * y0 + 2 * u * t * cy1 + t * t * y1];
-    };
-    for (let i = 0; i <= 34; i++) {
-      const [x, y] = garland(i / 34);
-      if (i % 5 === 2) {
-        ctx.fillStyle = '#2e8b3e';
-        ctx.beginPath(); ctx.ellipse(x, y + 16, 6, 14, 0, 0, Math.PI * 2); ctx.fill();
-      }
-      ctx.fillStyle = i % 2 ? '#f5a623' : '#ffcc33';
-      ctx.beginPath(); ctx.arc(x, y, 11, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = 'rgba(160,70,0,.5)';
-      ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
-    }
-    // hanging strand at the end of the garland
-    for (let i = 0; i < 6; i++) {
-      ctx.fillStyle = i % 2 ? '#f5a623' : '#ff7a1a';
-      ctx.beginPath(); ctx.arc(380, 34 + i * 17, 9, 0, Math.PI * 2); ctx.fill();
-    }
-
-    // star lantern (kandil) on the right
+    // mango-leaf thoranam with marigolds across the top
+    const ropeY = (x) => 12 + 12 * Math.sin(Math.PI * x / 600);
     ctx.strokeStyle = '#d9a441'; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(505, 125); ctx.lineTo(505, 205); ctx.stroke();
-    const lg = ctx.createRadialGradient(505, 255, 5, 505, 255, 70);
-    lg.addColorStop(0, 'rgba(255,120,190,.6)'); lg.addColorStop(1, 'rgba(255,120,190,0)');
-    ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(505, 255, 70, 0, Math.PI * 2); ctx.fill();
-    ctx.fillStyle = '#e84393'; drawStar(ctx, 505, 255, 52, 5, .5); ctx.fill();
-    ctx.fillStyle = '#ffd54a'; drawStar(ctx, 505, 257, 26, 5, .5); ctx.fill();
-    ctx.strokeStyle = '#ffd54a'; ctx.lineWidth = 3;
-    for (let i = -2; i <= 2; i++) {
-      ctx.beginPath(); ctx.moveTo(505 + i * 7, 290); ctx.lineTo(505 + i * 9, 345); ctx.stroke();
+    ctx.beginPath();
+    for (let x = 0; x <= 600; x += 10) ctx.lineTo(x, ropeY(x));
+    ctx.stroke();
+    for (let x = 14, i = 0; x < 600; x += 30, i++) {
+      const y = ropeY(x);
+      const len = 46 + (i % 2) * 8;
+      const g = ctx.createLinearGradient(x - 9, 0, x + 9, 0);
+      g.addColorStop(0, '#1f5e24'); g.addColorStop(.5, '#4caf50'); g.addColorStop(1, '#1f5e24');
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+      ctx.bezierCurveTo(x - 13, y + len * .35, x - 6, y + len * .8, x, y + len);
+      ctx.bezierCurveTo(x + 6, y + len * .8, x + 13, y + len * .35, x, y);
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(200,240,170,.6)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(x, y + 3); ctx.lineTo(x, y + len - 4); ctx.stroke();
+      ctx.fillStyle = i % 2 ? '#f5a623' : '#ffcc33';
+      ctx.beginPath(); ctx.arc(x + 15, ropeY(x + 15), 7, 0, Math.PI * 2); ctx.fill();
     }
 
-    // rangoli under the main diya
-    const rx = 300, ry = 385;
-    const ring = (r, n, len, wid, color, rot) => {
-      ctx.fillStyle = color;
-      for (let i = 0; i < n; i++) {
-        const a = rot + i * Math.PI * 2 / n;
-        ctx.save();
-        ctx.translate(rx + Math.cos(a) * r, ry + Math.sin(a) * r * .62);
-        ctx.rotate(a + Math.PI / 2);
-        ctx.beginPath(); ctx.ellipse(0, 0, wid, len, 0, 0, Math.PI * 2); ctx.fill();
+    // jasmine string hanging on the left
+    for (let i = 0; i < 12; i++) {
+      const y = 30 + i * 12;
+      const x = 46 + Math.sin(i * .6) * 4;
+      ctx.fillStyle = '#fffaf0';
+      ctx.beginPath(); ctx.ellipse(x, y, 4.5, 6, 0, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#9ccc65';
+      ctx.beginPath(); ctx.arc(x, y - 6, 1.6, 0, Math.PI * 2); ctx.fill();
+    }
+
+    // pulli kolam in rice-flour white, filled with colour, seen in perspective
+    ctx.save();
+    ctx.translate(300, 425);
+    ctx.scale(1, .56);
+    const R = 188, n = 24;
+    ctx.strokeStyle = '#fffaf0';
+    ctx.lineWidth = 3.4;
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      const a0 = i * Math.PI * 2 / n, a1 = (i + 1) * Math.PI * 2 / n, am = (a0 + a1) / 2;
+      const half = R * Math.sin(Math.PI / n);
+      const mx = Math.cos(am) * R * Math.cos(Math.PI / n), my = Math.sin(am) * R * Math.cos(Math.PI / n);
+      // semicircle bulging outward between neighbouring dots
+      ctx.arc(mx, my, half, am - Math.PI / 2, am + Math.PI / 2, false);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#fffaf0';
+    for (let i = 0; i < n; i++) {
+      const a = (i + .5) * Math.PI * 2 / n;
+      ctx.beginPath(); ctx.arc(Math.cos(a) * (R - 18), Math.sin(a) * (R - 18), 4, 0, Math.PI * 2); ctx.fill();
+    }
+    const petals = (count, r0, r1, wid, colors, rot) => {
+      for (let i = 0; i < count; i++) {
+        const a = rot + i * Math.PI * 2 / count;
+        ctx.save(); ctx.rotate(a);
+        ctx.beginPath();
+        ctx.moveTo(r0, 0);
+        ctx.bezierCurveTo(r0 + (r1 - r0) * .3, -wid, r0 + (r1 - r0) * .8, -wid * .6, r1, 0);
+        ctx.bezierCurveTo(r0 + (r1 - r0) * .8, wid * .6, r0 + (r1 - r0) * .3, wid, r0, 0);
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+        ctx.strokeStyle = '#fffaf0'; ctx.lineWidth = 3;
+        ctx.stroke();
         ctx.restore();
       }
     };
-    ctx.fillStyle = 'rgba(255,255,255,.08)';
-    ctx.beginPath(); ctx.ellipse(rx, ry, 205, 128, 0, 0, Math.PI * 2); ctx.fill();
-    ring(180, 22, 20, 9, '#e84393', 0);
-    ring(145, 18, 17, 8, '#ffd54a', .17);
-    ring(110, 16, 14, 7, '#0e9b98', 0);
-    ring(78, 12, 11, 6, '#ff6a2a', .26);
-    ctx.fillStyle = '#ffffff';
-    for (let i = 0; i < 40; i++) {
-      const a = i * Math.PI * 2 / 40;
-      ctx.beginPath(); ctx.arc(rx + Math.cos(a) * 200, ry + Math.sin(a) * 124, 3, 0, Math.PI * 2); ctx.fill();
+    petals(8, 40, 150, 40, ['#e84393', '#ffd54a'], 0);
+    petals(8, 40, 105, 22, ['#0e9b98', '#ff6a2a'], Math.PI / 8);
+    ctx.fillStyle = '#fffaf0';
+    for (let i = 0; i < 8; i++) {
+      const a = Math.PI / 8 + i * Math.PI / 4;
+      ctx.beginPath(); ctx.arc(Math.cos(a) * 130, Math.sin(a) * 130, 5, 0, Math.PI * 2); ctx.fill();
     }
+    ctx.beginPath(); ctx.arc(0, 0, 40, 0, Math.PI * 2);
+    ctx.fillStyle = '#c8102e'; ctx.fill();
+    ctx.strokeStyle = '#fffaf0'; ctx.lineWidth = 3; ctx.stroke();
+    ctx.restore();
 
-    // small diyas: one middle-left, one bottom-left
-    drawDiya(ctx, 70, 300, .55, 52);
-    drawDiya(ctx, 80, 470, .5, 48);
+    // kuthu vilakku standing on the right
+    drawKuthuVilakku(ctx, 530, 165, 345);
 
-    // ladoos on the bottom-right
-    const ladoo = (x, y) => {
-      const g = ctx.createRadialGradient(x - 6, y - 6, 2, x, y, 18);
-      g.addColorStop(0, '#ffe08a'); g.addColorStop(1, '#e08a00');
-      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI * 2); ctx.fill();
-    };
-    ctx.fillStyle = '#c0c0c8';
-    ctx.beginPath(); ctx.ellipse(510, 478, 66, 18, 0, 0, Math.PI * 2); ctx.fill();
-    ladoo(486, 462); ladoo(530, 462); ladoo(508, 440);
+    // small agal vilakkus on the left
+    drawDiya(ctx, 62, 330, .55, 52);
+    drawDiya(ctx, 70, 505, .5, 48);
 
-    // the main diya, centre stage
-    drawDiya(ctx, 280, 335, 1.05, 105);
+    // murukku on a banana leaf, bottom right
+    ctx.save();
+    ctx.translate(512, 500); ctx.rotate(-.18);
+    ctx.fillStyle = '#3f8f3a';
+    ctx.beginPath(); ctx.ellipse(0, 0, 82, 26, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = '#a5d6a7'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-78, 0); ctx.lineTo(78, 0); ctx.stroke();
+    ctx.restore();
+    drawMurukku(ctx, 484, 498, 22);
+    drawMurukku(ctx, 538, 492, 22);
+    drawMurukku(ctx, 511, 478, 20);
+
+    // the main agal vilakku, centre of the kolam
+    drawDiya(ctx, 280, 395, 1.0, 100);
 
     // greeting along the bottom
     ctx.textAlign = 'center';
     ctx.textBaseline = 'alphabetic';
-    ctx.font = '64px "Yatra One", serif';
+    ctx.font = '58px "Yatra One", serif';
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = 'rgba(60,8,10,.7)';
+    ctx.strokeText('Happy Deepavali', 300, 582);
     ctx.shadowColor = 'rgba(245,166,35,.85)';
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 16;
     ctx.fillStyle = '#ffd54a';
-    ctx.fillText('Happy Diwali', 300, 578);
+    ctx.fillText('Happy Deepavali', 300, 582);
     ctx.shadowBlur = 0;
 
     return c.toDataURL('image/jpeg', .9);
@@ -897,7 +1006,7 @@
 
   /* ───────────── start: wait for the fonts so the picture's lettering is right ───────────── */
   const fontsReady = document.fonts
-    ? Promise.race([document.fonts.load('64px "Yatra One"'), new Promise(r => setTimeout(r, 2500))])
+    ? Promise.race([document.fonts.load('58px "Yatra One"'), new Promise(r => setTimeout(r, 2500))])
     : Promise.resolve();
   fontsReady.then(() => build(paint()));
 })();
